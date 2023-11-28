@@ -7,7 +7,15 @@ $conn = $database->getConnection();
 
 $event = new Event($conn);
 
-// Create event if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $eventId = $_GET['id'];
+    if ($event->deleteEventById($eventId)) {
+        $delete_message = "Event deleted!";
+    } else {
+        echo "Event not deleted.";
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -101,29 +109,11 @@ $events = $event->getAllEvents();
                 <td><?php echo $event['date']; ?></td>
                 <td><?php echo $event['location']; ?></td>
                 <td>
-                    <span class="delete-icon" onclick="deleteEvent(<?php echo $event['id']; ?>)">Delete</span> |
-                    <span class="edit-icon" onclick="editEvent(<?php echo $event['id']; ?>)">Edit</span>
+                    <a href="edit_event.php?id=<?php echo $event['id']; ?>">Edit</a>
+                    <a href="admin_panel.php?action=delete&id=<?php echo $event['id']; ?>" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
-
-    <script>
-        function deleteEvent(eventId) {
-            if (confirm("Are you sure you want to delete this event?")) {
-                // Send AJAX request to delete event by ID
-                // Replace this part with your actual AJAX call to delete the event
-                // You can use XMLHttpRequest or fetch API to send a DELETE request to your server
-                // For demonstration purposes, alert the event ID
-                alert("Deleting event with ID: " + eventId);
-            }
-        }
-
-        function editEvent(eventId) {
-            // Redirect to edit event page with the event ID
-            // Replace 'edit_event.php' with your actual edit event page
-            window.location.href = 'edit_event.php?id=' + eventId;
-        }
-    </script>
 </body>
 </html>
