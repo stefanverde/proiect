@@ -1,39 +1,33 @@
 <?php
-// require_once('../classes/user.php');
-// require_once('../includes/db_config.php');
-
 require_once('./classes/user.php');
 require_once('./includes/db_config.php');
 
 $database = new Database();
 $conn = $database->getConnection();
 
-// // Initialize the Database connection
-// $database = new Database();
-// $db = $database->getConnection();
+$user = new User($conn);
 
-// // Initialize User object
-// $user = new User($db);
 
-// // Check if the registration form was submitted
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     // Validate and sanitize user input
-//     $username = $_POST['username'];
-//     $password = $_POST['password'];f
-//     // Set the user object properties
-//     $user->username = $username;
-//     $user->password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-//     // Attempt to register the user
-//     if ($user->register()) {
-//         // Registration successful - redirect to login page or another location
-//         header("Location: login.php");
-//         exit();
-//     } else {
-//         // Registration failed
-//         $registration_error = "Registration failed. Please try again.";
-//     }
-// }
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $email = $_POST['email'];
+
+    $user->username = $username;
+    $user->email = $email;
+    $user->password = password_hash($password, PASSWORD_DEFAULT); 
+
+    // Attempt to register the user
+    if ($user->register()) {
+        // Registration successful - redirect to login page or another location
+        header("Location: login.php");
+        exit();
+    } else {
+        // Registration failed
+        $registration_error = "Registration failed. Please try again.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,6 +47,9 @@ $conn = $database->getConnection();
     <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
         <label for="username">Username:</label>
         <input type="text" name="username" required><br><br>
+
+        <label for="username">Email:</label>
+        <input type="text" name="email" required><br><br>
 
         <label for="password">Password:</label>
         <input type="password" name="password" required><br><br>
