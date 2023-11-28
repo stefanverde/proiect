@@ -44,6 +44,44 @@ class Event {
       return $events;
     }
 
+    public function getAllEventsWithSpeakers() {
+      $query = "SELECT e.id, e.title, e.description, e.date, e.location, s.id AS speaker_id, s.name AS speaker_name, s.age AS speaker_age
+              FROM events e
+              LEFT JOIN speakers s ON e.id = s.event_id";
+  
+      $stmt = $this->conn->prepare($query);
+      $stmt->execute();
+      $result = $stmt->get_result();
+  
+      $events = array();
+  
+      while ($row = $result->fetch_assoc()) {
+        $eventId = $row['id'];
+  
+          if (!isset($events[$eventId])) {
+              $events[$eventId] = array(
+                  'id' => $row['id'],
+                  'title' => $row['title'],
+                  'description' => $row['description'],
+                  'date' => $row['date'],
+                  'location' => $row['location'],
+                  'speakers' => array()
+              );
+          }
+  
+          if (!empty($row['speaker_id'])) {
+              $events[$eventId]['speakers'][] = array(
+                  'id' => $row['speaker_id'],
+                  'name' => $row['speaker_name'],
+                  'age' => $row['speaker_age']
+              );
+          }
+      }
+  
+      return $events;
+  }
+  
+
     public function deleteEventById($id) {
       $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
       $stmt = $this->conn->prepare($query);

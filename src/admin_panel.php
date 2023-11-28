@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch all events
-$events = $event->getAllEvents();
+$events = $event->getAllEventsWithSpeakers();
 ?>
 
 <!DOCTYPE html>
@@ -100,20 +100,26 @@ $events = $event->getAllEvents();
             <th>Description</th>
             <th>Date</th>
             <th>Location</th>
+            <th>Speakers</th>
             <th>Action</th>
         </tr>
         <?php foreach ($events as $event): ?>
-            <tr>
-                <td><?php echo $event['title']; ?></td>
-                <td><?php echo $event['description']; ?></td>
-                <td><?php echo $event['date']; ?></td>
-                <td><?php echo $event['location']; ?></td>
-                <td>
-                    <a href="edit_event.php?id=<?php echo $event['id']; ?>">Edit</a>
-                    <a href="admin_panel.php?action=delete&id=<?php echo $event['id']; ?>" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
+        <tr>
+            <td><?php echo $event['title']; ?></td>
+            <td><?php echo $event['description']; ?></td>
+            <td><?php echo $event['date']; ?></td>
+            <td><?php echo $event['location']; ?></td>
+            <td>
+                <?php foreach ($event['speakers'] as $speaker): ?>
+                    <p><?php echo $speaker['name']; ?> - <?php echo $speaker['age']; ?></p>
+                <?php endforeach; ?>
+            </td>
+            <td>
+                <a href="edit_event.php?id=<?php echo $event['id']; ?>">Edit</a>
+                <a href="admin_panel.php?action=delete&id=<?php echo $event['id']; ?>" onclick="return confirm('Are you sure you want to delete this event?')">Delete</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
     </table>
 </body>
 </html>
