@@ -53,6 +53,24 @@ if (isset($_GET['id'])) {
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Your Site</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin_panel.php">Admin Panel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="events_list.php">Events List</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="form-container">
         <h2>Edit Event</h2>
         <?php
@@ -61,26 +79,26 @@ if (isset($_GET['id'])) {
         }
         ?>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-            <input type="hidden" name="event_id" value="<?php echo $eventId; ?>">
+            <input type="hidden" name="event_id" value="<?php echo isset($eventDetails['id']) ? $eventDetails['id'] : ''; ?>">
 
             <div class="mb-3">
                 <label for="title" class="form-label">Title:</label>
-                <input type="text" name="title" class="form-control" value="<?php echo $eventDetails['title']; ?>" required>
+                <input type="text" name="title" class="form-control" value="<?php echo isset($eventDetails['title']) ? $eventDetails['title'] : ''; ?>" required>
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label">Description:</label>
-                <input type="text" name="description" class="form-control" value="<?php echo $eventDetails['description']; ?>" required>
+                <input type="text" name="description" class="form-control" value="<?php echo isset($eventDetails['description']) ? $eventDetails['description'] : ''; ?>" required>
             </div>
 
             <div class="mb-3">
                 <label for="date" class="form-label">Date:</label>
-                <input type="text" name="date" class="form-control" value="<?php echo $eventDetails['date']; ?>" required>
+                <input type="text" name="date" class="form-control" value="<?php echo isset($eventDetails['date']) ? $eventDetails['date'] : ''; ?>" required>
             </div>
 
             <div class="mb-3">
                 <label for="location" class="form-label">Location:</label>
-                <input type="text" name="location" class="form-control" value="<?php echo $eventDetails['location']; ?>" required>
+                <input type="text" name="location" class="form-control" value="<?php echo isset($eventDetails['location']) ? $eventDetails['location'] : ''; ?>" required>
             </div>
 
             <input type="submit" value="Update" class="btn btn-primary">
